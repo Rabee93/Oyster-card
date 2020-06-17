@@ -2,11 +2,18 @@ require 'oystercard'
 
 describe Oystercard do
   let(:oystercard) {Oystercard.new}
+  let(:station) { "Kings Cross" }
   
     describe 'initialize' do
-        it 'can create an instance of oystercard' do
-            expect(oystercard).to be_an_instance_of(Oystercard)
-        end
+      it 'can create an instance of oystercard' do
+        card = Oystercard.new
+        expect(card).to be_an_instance_of(Oystercard)
+      end
+
+      it 'can create a zero balance' do
+        card = Oystercard.new
+        expect(card.balance).to eq(0)
+      end
     end
 
 
@@ -52,45 +59,66 @@ describe Oystercard do
 
     describe '#touch_in' do
       it 'in_journey will be true when touched in' do
-        
         oystercard.top_up(10)
-        oystercard.touch_in
-        expect(oystercard.in_journey).to eq(true)
+        oystercard.touch_in(station)
+        expect(oystercard.in_journey?).to eq(true)
         #expect(oystercard).to be_in_journey
       end
+
+      it 'will accept an entry station as an argument' do
+        oystercard.top_up(10)
+        expect(oystercard).to respond_to(:touch_in).with(1).argument
+      end
+
       it 'if low balance cant touch in' do
         
         #min_balance = Oystercard::MIN_BALANCE
         #ystercard.touch_in
         @balance = 0
         #oystercard.deduct(10)
-        expect{ oystercard.touch_in }.to raise_error 'low balance'
+        expect{ oystercard.touch_in(station) }.to raise_error 'low balance'
       end
     end
 
     describe '#touch_out' do
       it 'in_journey will be false when touched out' do
-
         oystercard.top_up(3)
-        oystercard.touch_in
+        oystercard.touch_in(station)
         oystercard.touch_out
         #expect(oystercard.in_journey).to eq(false)
         expect(subject).not_to be_in_journey
+      end
+
+      it 'will clear entry station on touch out' do
+        oystercard.top_up(3)
+        oystercard.touch_in(station)
+        oystercard.touch_out
+        expect(oystercard.entry_station).to eq(nil)
       end
     end
     describe "#history" do
       it'shows last journy station' do 
         oystercard.top_up(3)
-        oystercard.touch_in
+        oystercard.touch_in(station)
         oystercard.touch_out
         expect(oystercard).to respond_to(:history)
       end 
       it 'shows us the last station we touched in at' do
-        station = ("Kings cross")
         oystercard.top_up(3)
-        oystercard.touch_in
-        oystercard.touch_out
+        oystercard.touch_in(station)
+        # oystercard.touch_out
         expect(oystercard.history).to eq(station)
       end 
     end 
+
+    describe "#entry_station" do
+      it 'will remember the station touched in at' do
+        oystercard.top_up(3)
+        oystercard.touch_in(station)
+        # oystercard.touch_out
+        expect(oystercard.entry_station).to eq(station)
+      end
+
+    end
+  
   end
