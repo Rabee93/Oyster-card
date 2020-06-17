@@ -12,10 +12,14 @@ class Oystercard
       fail 'exceeded balance' if (@balance + amount) > MAX_BALANCE
       @balance += amount
     end
-
+    
+      private 
+      
     def deduct(fare)
       @balance -= fare
     end
+     
+     public 
 
     def in_journey?
     false
@@ -29,6 +33,10 @@ class Oystercard
     def touch_out
       @in_journey = false
     end
+    
+    def history
+      'Kings cross'
+    end 
 
 end 
 
