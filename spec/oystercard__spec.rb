@@ -2,7 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
   let(:oystercard) {Oystercard.new}
-  
+  let(:station) {double 'station'}
     describe 'initialize' do
         it 'can create an instance of oystercard' do
             expect(oystercard).to be_an_instance_of(Oystercard)
@@ -54,43 +54,40 @@ describe Oystercard do
       it 'in_journey will be true when touched in' do
         
         oystercard.top_up(10)
-        oystercard.touch_in
-        expect(oystercard.in_journey).to eq(true)
+        oystercard.touch_in(station)
+        expect(oystercard.in_journey?).to eq(true)
         #expect(oystercard).to be_in_journey
       end
+      it { is_expected.to respond_to(:touch_in).with(1).argument }
       it 'if low balance cant touch in' do
         
         #min_balance = Oystercard::MIN_BALANCE
         #ystercard.touch_in
         @balance = 0
         #oystercard.deduct(10)
-        expect{ oystercard.touch_in }.to raise_error 'low balance'
+        expect{ oystercard.touch_in(station) }.to raise_error 'low balance'
       end
+      it 'stores the entry station as an argument' do
+        oystercard.top_up(3)
+        oystercard.touch_in(station)
+        expect(oystercard.entry_station).to eq(station)
+      end 
     end
 
     describe '#touch_out' do
       it 'in_journey will be false when touched out' do
 
         oystercard.top_up(3)
-        oystercard.touch_in
+        oystercard.touch_in(station)
         oystercard.touch_out
         #expect(oystercard.in_journey).to eq(false)
         expect(subject).not_to be_in_journey
       end
+      it 'entry_station is reste to nil after touch_out' do
+        oystercard.top_up(3)
+        oystercard.touch_in(station)
+        oystercard.touch_out
+        expect(oystercard.entry_station).to be(nil)
+      end 
     end
-    describe "#history" do
-      it'shows last journy station' do 
-        oystercard.top_up(3)
-        oystercard.touch_in
-        oystercard.touch_out
-        expect(oystercard).to respond_to(:history)
-      end 
-      it 'shows us the last station we touched in at' do
-        station = ("Kings cross")
-        oystercard.top_up(3)
-        oystercard.touch_in
-        oystercard.touch_out
-        expect(oystercard.history).to eq(station)
-      end 
-    end 
   end
