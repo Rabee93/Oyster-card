@@ -2,7 +2,6 @@ require 'oystercard'
 
 describe Oystercard do
   let(:oystercard) {Oystercard.new}
-<<<<<<< HEAD
   let(:entry_station) {double 'station'}
   let(:exit_station) {double 'station'}
     describe 'initialize' do
@@ -15,20 +14,6 @@ describe Oystercard do
         it 'should have no journeys when a new oystercard is created' do
           expect(oystercard.journeys).to be_empty
         end 
-=======
-  let(:station) { "Kings Cross" }
-  
-    describe 'initialize' do
-      it 'can create an instance of oystercard' do
-        card = Oystercard.new
-        expect(card).to be_an_instance_of(Oystercard)
-      end
-
-      it 'can create a zero balance' do
-        card = Oystercard.new
-        expect(card.balance).to eq(0)
-      end
->>>>>>> 30630e6198edab4d9deb37ac0370f3ceda2d2a82
     end
 
 
@@ -40,7 +25,7 @@ describe Oystercard do
     end
 
      describe '#top_up' do
-     # it { is_expected.to respond_to(:top_up).with(1).argument }
+     # 
       #it 'can top up the balance' do
       #expect{ subject.top_up 1 }.to change{ subject.balance }.by 1
       #end
@@ -75,35 +60,18 @@ describe Oystercard do
     describe '#touch_in' do
       it 'in_journey will be true when touched in' do
         oystercard.top_up(10)
-<<<<<<< HEAD
         oystercard.touch_in(entry_station)
         expect(oystercard.in_journey?).to eq(true)
         #expect(oystercard).to be_in_journey
       end
       it { is_expected.to respond_to(:touch_in).with(1).argument }
-=======
-        oystercard.touch_in(station)
-        expect(oystercard.in_journey?).to eq(true)
-        #expect(oystercard).to be_in_journey
-      end
-
-      it 'will accept an entry station as an argument' do
-        oystercard.top_up(10)
-        expect(oystercard).to respond_to(:touch_in).with(1).argument
-      end
-
->>>>>>> 30630e6198edab4d9deb37ac0370f3ceda2d2a82
       it 'if low balance cant touch in' do
         
         #min_balance = Oystercard::MIN_BALANCE
         #ystercard.touch_in
         @balance = 0
         #oystercard.deduct(10)
-<<<<<<< HEAD
         expect{ oystercard.touch_in(entry_station) }.to raise_error 'low balance'
-=======
-        expect{ oystercard.touch_in(station) }.to raise_error 'low balance'
->>>>>>> 30630e6198edab4d9deb37ac0370f3ceda2d2a82
       end
       it 'stores the entry station as an argument' do
         oystercard.top_up(3)
@@ -115,7 +83,6 @@ describe Oystercard do
     describe '#touch_out' do
       it 'in_journey will be false when touched out' do
         oystercard.top_up(3)
-<<<<<<< HEAD
         oystercard.touch_in(entry_station)
         oystercard.touch_out(exit_station)
         #expect(oystercard.in_journey).to eq(false)
@@ -141,42 +108,15 @@ describe Oystercard do
         oystercard.touch_in(entry_station)
         oystercard.touch_out(exit_station)
         expect(oystercard.journey).to eq(entry_station => exit_station)
-=======
-        oystercard.touch_in(station)
-        oystercard.touch_out
-        #expect(oystercard.in_journey).to eq(false)
-        expect(subject).not_to be_in_journey
-      end
-
-      it 'will clear entry station on touch out' do
-        oystercard.top_up(3)
-        oystercard.touch_in(station)
-        oystercard.touch_out
-        expect(oystercard.entry_station).to eq(nil)
-      end
-    end
-    describe "#history" do
-      it'shows last journy station' do 
-        oystercard.top_up(3)
-        oystercard.touch_in(station)
-        oystercard.touch_out
-        expect(oystercard).to respond_to(:history)
-      end 
-      it 'shows us the last station we touched in at' do
-        oystercard.top_up(3)
-        oystercard.touch_in(station)
-        # oystercard.touch_out
-        expect(oystercard.history).to eq(station)
->>>>>>> 30630e6198edab4d9deb37ac0370f3ceda2d2a82
       end 
     end 
 
     describe "#entry_station" do
       it 'will remember the station touched in at' do
         oystercard.top_up(3)
-        oystercard.touch_in(station)
+        oystercard.touch_in(entry_station)
         # oystercard.touch_out
-        expect(oystercard.entry_station).to eq(station)
+        expect(oystercard.entry_station).to eq(entry_station)
       end
 
     end
